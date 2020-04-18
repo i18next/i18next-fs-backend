@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/i18next/i18next-fs-backend/master.svg?style=flat-square)](https://travis-ci.org/i18next/i18next-fs-backend)
 [![npm version](https://img.shields.io/npm/v/i18next-fs-backend.svg?style=flat-square)](https://www.npmjs.com/package/i18next-fs-backend)
 
-This is an i18next backend to be used in node.js and Deno. It will load resources from the file system.
+This is an i18next backend to be used in Node.js and Deno. It will load resources from the file system.
 
 # Getting started
 
@@ -34,7 +34,7 @@ i18next.use(Backend).init(i18nextOptions);
   loadPath: '/locales/{{lng}}/{{ns}}.json',
 
   // path to post missing resources
-  addPath: '/locales/add/{{lng}}/{{ns}}'
+  addPath: '/locales/{{lng}}/{{ns}}.missing.json'
 }
 ```
 

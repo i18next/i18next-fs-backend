@@ -31,7 +31,7 @@
     "mocha": "7.1.1",
     "uglify-js": "3.8.1"
   },
-  "description": "i18next-fs-backend is a backend layer for i18next using in node.js and for deno to load translations from the filesystem.",
+  "description": "i18next-fs-backend is a backend layer for i18next using in Node.js and for Deno to load translations from the filesystem.",
   "keywords": [
     "i18next",
     "i18next-backend",
