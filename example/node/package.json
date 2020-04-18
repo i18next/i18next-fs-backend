@@ -1,0 +1,6 @@
+{
+  "type": "common",
+  "dependencies": {
+    "i18next": "19.4.2"
+  }
+}
