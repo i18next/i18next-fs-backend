@@ -27,7 +27,7 @@ import Backend from 'i18next-fs-backend';
 i18next.use(Backend).init(i18nextOptions);
 ```
 
-in Deno
+for Deno:
 
 ```js
 import i18next from 'https://deno.land/x/i18next/index.js'
