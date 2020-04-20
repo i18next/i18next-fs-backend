@@ -1,7 +1,7 @@
 import i18next from 'https://deno.land/x/i18next/index.js'
-// import Backend from 'https://cdn.jsdelivr.net/gh/i18next/i18next-fs-backend/index.js'
+import Backend from 'https://cdn.jsdelivr.net/gh/i18next/i18next-fs-backend/index.js'
 // import Backend from 'https://raw.githubusercontent.com/i18next/i18next-fs-backend/master/index.js'
-import Backend from '../../lib/index.js'
+// import Backend from '../../lib/index.js'
 
 i18next.use(Backend).init({
   // initImmediate: false,

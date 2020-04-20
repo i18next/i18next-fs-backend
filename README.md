@@ -27,6 +27,15 @@ import Backend from 'i18next-fs-backend';
 i18next.use(Backend).init(i18nextOptions);
 ```
 
+in Deno
+
+```js
+import i18next from 'https://deno.land/x/i18next/index.js'
+import Backend from 'https://cdn.jsdelivr.net/gh/i18next/i18next-fs-backend/index.js'
+
+i18next.use(Backend).init(i18nextOptions);
+```
+
 - As with all modules you can either pass the constructor function (class) to the i18next.use or a concrete instance.
 
 ## Backend Options
