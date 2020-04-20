@@ -5,6 +5,12 @@
 
 This is an i18next backend to be used in Node.js and Deno. It will load resources from the file system.
 
+It will load resources from filesystem. Right now it supports following filetypes:
+
+- .json
+- .json5
+- .yml/.yaml
+
 # Getting started
 
 ```
