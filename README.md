@@ -1,7 +1,7 @@
 # Introduction
 
-[![Actions](https://github.com/i18next/i18next-fs-backend/workflows/.github/workflows/node.yml/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3A.github%2Fworkflows%2Fnode.yml)
-[![Actions deno](https://github.com/i18next/i18next-fs-backend/workflows/.github/workflows/deno.yml/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3A.github%2Fworkflows%2Fdeno.yml)
+[![Actions](https://github.com/i18next/i18next-fs-backend/workflows/node/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3Anode)
+[![Actions deno](https://github.com/i18next/i18next-fs-backend/workflows/deno/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3Adeno)
 [![Travis](https://img.shields.io/travis/i18next/i18next-fs-backend/master.svg?style=flat-square)](https://travis-ci.org/i18next/i18next-fs-backend)
 [![npm version](https://img.shields.io/npm/v/i18next-fs-backend.svg?style=flat-square)](https://www.npmjs.com/package/i18next-fs-backend)
 

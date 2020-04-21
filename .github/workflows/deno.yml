@@ -1,3 +1,5 @@
+name: deno
+
 on:
   push:
     branches:
