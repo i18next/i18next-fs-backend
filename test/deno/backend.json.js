@@ -1,5 +1,5 @@
 const { test } = Deno
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts"
+import { assertEquals } from 'https://deno.land/std/testing/asserts.ts'
 import { __ } from 'https://deno.land/x/dirname/mod.ts'
 const { __dirname } = __(import.meta)
 import i18next from 'https://deno.land/x/i18next/index.js'
