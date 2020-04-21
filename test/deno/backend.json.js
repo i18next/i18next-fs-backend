@@ -10,7 +10,7 @@ test('BackendConnector with normal json', async () => {
   // before
   i18next.init()
 
-  let connector = i18next.services.backendConnector
+  const connector = i18next.services.backendConnector
   connector.backend = new Backend(i18next.services, {
     loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`,
     addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`
