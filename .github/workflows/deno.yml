@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node
+      - name: Setup Deno
         uses: denolib/setup-deno@master
         with:
           deno-version: ${{ matrix.deno }}
