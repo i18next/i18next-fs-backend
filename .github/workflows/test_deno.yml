@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    name: Test on deno ${{ matrix.node }} and ${{ matrix.os }}
+    name: Test on deno ${{ matrix.deno }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
