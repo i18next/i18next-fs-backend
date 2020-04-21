@@ -1,6 +1,7 @@
 # Introduction
 
 [![Travis](https://img.shields.io/travis/i18next/i18next-fs-backend/master.svg?style=flat-square)](https://travis-ci.org/i18next/i18next-fs-backend)
+[![Actions](https://github.com/i18next/i18next-fs-backend/workflows/.github/workflows/test.yml/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions)
 [![npm version](https://img.shields.io/npm/v/i18next-fs-backend.svg?style=flat-square)](https://www.npmjs.com/package/i18next-fs-backend)
 
 This is an i18next backend to be used in Node.js and Deno. It will load resources from the file system.
