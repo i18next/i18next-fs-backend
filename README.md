@@ -7,6 +7,8 @@
 
 This is an i18next backend to be used in Node.js and Deno. It will load resources from the file system.
 
+It's based on the deprecated [i18next-node-fs-backend](https://github.com/i18next/i18next-node-fs-backend) and can mostly be used as a drop-in replacement.
+
 It will load resources from filesystem. Right now it supports following filetypes:
 
 - .json
