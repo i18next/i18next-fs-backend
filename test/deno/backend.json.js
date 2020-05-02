@@ -16,6 +16,7 @@ test('BackendConnector with normal json', async () => {
     loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`,
     addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`
   })
+  await wait(200) // I don't know why, probably because of debouncedWrite
   await writeFile(`${__dirname}/../locales/en/test.json`, { key: 'passing' })
 
   // test

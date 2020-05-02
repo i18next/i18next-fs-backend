@@ -16,6 +16,7 @@ test('BackendConnector with js', async () => {
     loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.js`,
     addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.js`
   })
+  await wait(200) // I don't know why, probably because of debouncedWrite
   await writeFile(`${__dirname}/../locales/en/test.js`, { key: 'passing' })
 
   // test

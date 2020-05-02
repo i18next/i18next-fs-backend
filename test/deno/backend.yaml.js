@@ -16,6 +16,7 @@ test('BackendConnector with yaml', async () => {
     loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.yaml`,
     addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.yaml`
   })
+  await wait(200) // I don't know why, probably because of debouncedWrite
   await writeFile(`${__dirname}/../locales/en/test.yaml`, { key: 'passing' })
 
   // test
