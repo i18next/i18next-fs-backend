@@ -5,6 +5,7 @@ const { __dirname } = __(import.meta)
 import i18next from 'https://deno.land/x/i18next/index.js'
 import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 test('BackendConnector with js', async () => {
   // before
@@ -41,4 +42,5 @@ test('BackendConnector with js', async () => {
 
   // after
   await writeFile(`${__dirname}/../locales/en/test.js`, { key: 'passing' })
+  await wait(500) // I don't know why, probably because of debouncedWrite
 })
