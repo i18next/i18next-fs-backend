@@ -60,7 +60,7 @@
     "copy:yaml": "cp node_modules/js-yaml/dist/js-yaml.min.js lib/formats/yaml.js",
     "copy": "rm -rf lib/formats && mkdir lib/formats && npm run copy:json5 && npm run copy:yaml",
     "lint": "eslint .",
-    "compile": "npm run copy && rm -rf cjs && mkdir cjs && babel lib -d cjs --presets=@babel/preset-env --plugins=add-module-exports && echo '{\"type\":\"commonjs\"}' > cjs/package.json && cp lib/fs.cjs cjs/fs.cjs",
+    "compile": "npm run copy && rm -rf cjs && mkdir cjs && babel lib -d cjs --presets=@babel/preset-env --plugins=add-module-exports && echo '{\"type\":\"commonjs\"}' > cjs/package.json && cp lib/fs.cjs cjs/fs.js && node -e \"fs.writeFileSync('cjs/readFile.js', fs.readFileSync('cjs/readFile.js').toString().replace('fs.cjs', 'fs.js'))\" && node -e \"fs.writeFileSync('cjs/writeFile.js', fs.readFileSync('cjs/writeFile.js').toString().replace('fs.cjs', 'fs.js'))\"",
     "build": "npm run compile",
     "test": "npm run lint && npm run build && mocha test -R spec --exit --experimental-modules",
     "test:deno": "deno test test/deno/*.js --allow-read --allow-write",
