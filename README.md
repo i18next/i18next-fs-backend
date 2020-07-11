@@ -17,7 +17,7 @@ It will load resources from filesystem. Right now it supports following filetype
 
 # Getting started
 
-```
+```bash
 # npm package
 $ npm install i18next-fs-backend
 ```
