@@ -1,7 +1,7 @@
 const { test } = Deno
 import { assertEquals } from 'https://deno.land/std/testing/asserts.ts'
-import { __ } from 'https://deno.land/x/dirname/mod.ts'
-const { __dirname } = __(import.meta)
+import { fromFileUrl, dirname } from 'https://deno.land/std/path/mod.ts'
+const __dirname = dirname(fromFileUrl(import.meta.url))
 import i18next from 'https://deno.land/x/i18next/index.js'
 import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
