@@ -65,7 +65,7 @@ Options can be passed in:
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
-i18next.use(HttpApi).init({
+i18next.use(Backend).init({
   backend: options,
 });
 ```
@@ -73,7 +73,7 @@ i18next.use(HttpApi).init({
 on construction:
 
 ```js
-import HttpApi from 'i18next-fs-backend';
+import Backend from 'i18next-fs-backend';
 const Backend = new Backend(null, options);
 ```
 
