@@ -19,26 +19,26 @@ test('BackendConnector as caching layer', async () => {
   })
   await wait(200) // I don't know why, probably because of debouncedWrite
   try {
-    await removeFile(`${__dirname}/../locales/en/test_caching.json`)
+    await removeFile(`${__dirname}/../locales/de/test_caching.json`)
   } catch (e) {}
 
   // test
   await (new Promise((resolve, reject) => {
-    connector.backend.read(['en'], ['test_caching'], (err) => {
+    connector.backend.read(['de'], ['test_caching'], (err) => {
       if (!err) return reject(new Error('An error is expected here!'))
       resolve()
     })
   }))
 
   await (new Promise((resolve, reject) => {
-    connector.backend.save('en', 'test_caching', { key: 'save in cache' }, (err) => {
+    connector.backend.save('de', 'test_caching', { key: 'save in cache' }, (err) => {
       if (err) return reject(err)
       resolve()
     })
   }))
 
   const ns = await (new Promise((resolve, reject) => {
-    connector.backend.read(['en'], ['test_caching'], (err, ns) => err ? reject(err) : resolve(ns))
+    connector.backend.read(['de'], ['test_caching'], (err, ns) => err ? reject(err) : resolve(ns))
   }))
 
   assertEquals(ns, {
@@ -48,7 +48,7 @@ test('BackendConnector as caching layer', async () => {
   await wait(300)
 
   await (new Promise((resolve, reject) => {
-    connector.backend.read(['en'], ['test_caching'], (err) => {
+    connector.backend.read(['de'], ['test_caching'], (err) => {
       if (!err) return reject(new Error('An error is expected here!'))
       resolve()
     })
@@ -56,7 +56,7 @@ test('BackendConnector as caching layer', async () => {
 
   // after
   try {
-    await removeFile(`${__dirname}/../locales/en/test_caching.json`)
+    await removeFile(`${__dirname}/../locales/de/test_caching.json`)
   } catch (e) {}
   await wait(500) // I don't know why, probably because of debouncedWrite
 })
