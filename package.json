@@ -51,12 +51,7 @@
   "bugs": {
     "url": "https://github.com/i18next/i18next-fs-backend/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/i18next/i18next-fs-backend/master/licence"
-    }
-  ],
+  "license": "MIT",
   "scripts": {
     "copy:json5": "cp node_modules/json5/dist/index.mjs lib/formats/json5.js",
     "copy:yaml": "cp node_modules/js-yaml/dist/js-yaml.mjs lib/formats/yaml.js",
