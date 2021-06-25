@@ -1,0 +1,16 @@
+{
+  "home": {
+    "title": "Hello World!"
+  },
+  "server": {
+    "started": "Server is listening on port {{port}}."
+  },
+  "invitation": {
+    "accept": "accept invitation",
+    "endText": "Having questions? Just contact us at {{email}}.",
+    "greeting": "Hi {{firstname}},",
+    "salutation": "Best regards, Your AWESOME-PRODUCT team",
+    "subject": "Invitation to AWESOME-PRODUCT",
+    "text": "You were invited to AWESOME-PRODUCT"
+  }
+}

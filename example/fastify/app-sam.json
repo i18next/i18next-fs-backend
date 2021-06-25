@@ -1,0 +1,55 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Parameters": {
+    "Timeout": {
+      "Type": "Number",
+      "Default": 30000
+    }
+  },
+  "Resources": {
+    "ExampleAppApi": {
+      "Type": "AWS::Serverless::HttpApi",
+      "Properties": {
+        "StageName": "$default",
+        "DefinitionBody": {
+          "info": {
+            "title": {
+              "Ref": "AWS::StackName"
+            }
+          },
+          "openapi": "3.0.1",
+          "paths": {}
+        }
+      }
+    },
+    "ExampleApp": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AWS::StackName"
+        },
+        "Runtime": "nodejs14.x",
+        "Handler": "lambda.handler",
+        "Timeout": 30,
+        "MemorySize": 512,
+        "CodeUri": "build",
+        "Events": {
+          "ExampleAppProxyGET": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "GET",
+              "ApiId": {
+                "Ref": "ExampleAppApi"
+              },
+              "TimeoutInMillis": {
+                "Ref": "Timeout"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

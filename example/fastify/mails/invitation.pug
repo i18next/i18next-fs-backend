@@ -1,0 +1,8 @@
+extends ./layout.pug
+
+block content
+  mj-text(align='left', color='#ffffff', font-size='16px', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px')
+    =t('invitation.text')
+  mj-button(href=invitationLink, align='left', font-size='16px', background-color='#024b3f', border-radius='5px', color='#ffffff', font-family='open Sans Helvetica, Arial, sans-serif')=t('invitation.accept')
+  mj-text(align='left', color='#ffffff', font-size='16px', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px')
+    =t('invitation.endText', { email: 'support@awesome-product.com' })

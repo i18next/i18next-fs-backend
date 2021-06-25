@@ -1,0 +1,26 @@
+mjml
+  mj-body(background-color='#ffffff')
+    mj-section(background-color='#ffffff', padding-bottom='0px', padding-top='0')
+      mj-column(vertical-align='top', width='100%')
+        block headerImage
+          - var imgUrl = imageUrl || 'https://raw.githubusercontent.com/i18next/i18next/master/assets/i18next-ecosystem.jpg'
+          mj-image(src=imgUrl, alt='', align='center', border='none', width='600px', padding-left='0px', padding-right='0px', padding-bottom='0px', padding-top='0')
+    mj-section(background-color='#024b3f', padding-bottom='0px', padding-top='0')
+      mj-column(vertical-align='top', width='100%')
+        block subject
+          mj-text(align='left', color='#ffffff', font-size='22px', font-weight='bold', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px', padding-bottom='30px', padding-top='50px')=title || 'Mail'
+    mj-section(background-color='#26a69a', padding-bottom='20px', padding-top='20px')
+      mj-column(vertical-align='middle', width='100%')
+        block greeting
+          mj-text(align='left', color='#ffffff', font-size='16px', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px')
+            span(style='color:#024b3f')=t('invitation.greeting', { firstname: firstname || 'Test' })
+            br
+            br
+        block content
+          mj-text(align='left', color='#ffffff', font-size='16px', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px')
+            br
+        block salutaion
+          mj-text(align='left', color='#ffffff', font-size='16px', font-family='open Sans Helvetica, Arial, sans-serif', padding-left='25px', padding-right='25px')
+            span=t('invitation.salutation')
+            br
+            a(href='https://www.i18next.com', style='text-decoration: none; color: #ffffff') www.i18next.com

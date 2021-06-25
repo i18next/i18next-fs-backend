@@ -1,0 +1,16 @@
+html
+  head
+    title i18next - express with pug
+  body
+    h1= t('home.title')
+    div
+      a(href="/?lng=en") english
+      | &nbsp; | &nbsp;
+      a(href="/?lng=it") italiano
+      | &nbsp; | &nbsp;
+      a(href="/?lng=de") deutsch
+    hr
+    div
+      a(href="/email") email test
+      | &nbsp; | &nbsp;
+      a(href="/raw") raw test

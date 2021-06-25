@@ -1,0 +1,16 @@
+{
+  "home": {
+    "title": "Ciao Mondo!"
+  },
+  "server": {
+    "started": "Il server sta aspettando sul port {{port}}."
+  },
+  "invitation": {
+    "accept": "accetta l'invito",
+    "endText": "Hai domande? Contattaci con {{email}}.",
+    "greeting": "Ciao {{firstname}},",
+    "salutation": "Cordiali saluti, Il team di AWESOME-PRODUCT",
+    "subject": "Invito per AWESOME-PRODUCT",
+    "text": "Sei stato invitate per AWESOME-PRODUCT"
+  }
+}
