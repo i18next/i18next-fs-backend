@@ -3,7 +3,7 @@
     "title": "Hallo Welt!"
   },
   "server": {
-    "started": "Der server läuscht auf dem Port {{port}}."
+    "started": "Der server lauscht auf dem Port {{port}}."
   },
   "invitation": {
     "accept": "akzeptiere die Einladung",

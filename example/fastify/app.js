@@ -36,6 +36,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (err) return console.error(err)
     console.log(i18next.t('server.started', { port }))
     console.log(i18next.t('server.started', { port, lng: 'de' }))
+    console.log(i18next.t('server.started', { port, lng: 'it' }))
   })
 } else {
   // imported as a module, i.e. when used in aws-lambda
