@@ -14,6 +14,7 @@ It will load resources from filesystem. Right now it supports following filetype
 - .json
 - .json5
 - .yml/.yaml
+- .js/.ts (very limited, checks for `exports` or `export default`)
 
 # Getting started
 
