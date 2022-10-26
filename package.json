@@ -7,35 +7,42 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "types": "./index.d.ts",
       "require": "./cjs/index.js",
       "default": "./esm/index.js"
     },
     "./cjs": {
+      "types": "./index.d.ts",
       "default": "./cjs/index.js"
     },
     "./esm": {
+      "types": "./index.d.ts",
       "default": "./esm/index.js"
     }
   },
   "module": "./esm/index.js",
+  "types": "./index.d.ts",
   "devDependencies": {
-    "@babel/cli": "7.18.10",
-    "@babel/core": "7.18.10",
-    "@babel/preset-env": "7.18.10",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.6",
+    "@babel/preset-env": "7.19.4",
     "babel-plugin-add-module-exports": "1.0.4",
-    "eslint": "8.21.0",
+    "dtslint": "^4.2.1",
+    "eslint": "8.26.0",
     "eslint-config-standard": "17.0.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-n": "15.2.4",
-    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-n": "15.3.0",
+    "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-require-path-exists": "1.1.9",
     "eslint-plugin-standard": "5.0.0",
     "expect.js": "0.3.1",
-    "i18next": "21.8.16",
+    "i18next": "21.x",
     "js-yaml": "4.1.0",
     "json5": "2.2.1",
-    "mocha": "10.0.0",
-    "uglify-js": "3.16.3"
+    "mocha": "10.1.0",
+    "tslint": "^5.20.1",
+    "typescript": "^4.8.4",
+    "uglify-js": "3.17.4"
   },
   "description": "i18next-fs-backend is a backend layer for i18next using in Node.js and for Deno to load translations from the filesystem.",
   "keywords": [
@@ -61,7 +68,8 @@
     "compile:cjs": "rm -rf cjs && mkdir cjs && BABEL_ENV=cjs babel lib -d cjs && echo '{\"type\":\"commonjs\"}' > cjs/package.json && cp lib/fs.cjs cjs/fs.js && cp lib/path.cjs cjs/path.js && node -e \"fs.writeFileSync('cjs/readFile.js', fs.readFileSync('cjs/readFile.js').toString().replace('fs.cjs', 'fs.js').replace('path.cjs', 'path.js'))\" && node -e \"fs.writeFileSync('cjs/writeFile.js', fs.readFileSync('cjs/writeFile.js').toString().replace('fs.cjs', 'fs.js'))\"",
     "compile": "npm run copy && npm run compile:esm && npm run compile:cjs",
     "build": "npm run compile",
-    "test": "npm run lint && npm run build && mocha test -R spec --exit --experimental-modules",
+    "test": "npm run lint && npm run build && mocha test -R spec --exit --experimental-modules && npm run test:typescript",
+    "test:typescript": "tslint --project tsconfig.json",
     "test:deno": "deno test test/deno/*.js --allow-read --allow-write --no-check",
     "preversion": "npm run test && npm run build && git push",
     "postversion": "git push && git push --tags"
