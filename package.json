@@ -36,11 +36,12 @@
     "eslint-plugin-require-path-exists": "1.1.9",
     "eslint-plugin-standard": "5.0.0",
     "expect.js": "0.3.1",
-    "i18next": "21.x",
+    "i18next": "22.0.2",
     "js-yaml": "4.1.0",
     "json5": "2.2.1",
     "mocha": "10.1.0",
     "tslint": "^5.20.1",
+    "tsd": "0.24.1",
     "typescript": "^4.8.4",
     "uglify-js": "3.17.4"
   },
@@ -69,9 +70,12 @@
     "compile": "npm run copy && npm run compile:esm && npm run compile:cjs",
     "build": "npm run compile",
     "test": "npm run lint && npm run build && mocha test -R spec --exit --experimental-modules && npm run test:typescript",
-    "test:typescript": "tslint --project tsconfig.json",
+    "test:typescript": "tslint --project tsconfig.json && tsd",
     "test:deno": "deno test test/deno/*.js --allow-read --allow-write --no-check",
     "preversion": "npm run test && npm run build && git push",
     "postversion": "git push && git push --tags"
+  },
+  "tsd": {
+    "directory": "test/typescript"
   }
 }

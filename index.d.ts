@@ -48,7 +48,7 @@ export default class I18NexFsBackend
 }
 
 declare module "i18next" {
-  interface PluginOptions {
+  interface CustomPluginOptions {
     backend?: BackendOptions;
   }
 }
