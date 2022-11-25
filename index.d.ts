@@ -33,6 +33,7 @@ interface BackendOptions {
 export default class I18NexFsBackend
   implements BackendModule<BackendOptions>
 {
+  static type: "backend";
   constructor(services?: any, options?: BackendOptions);
   init(services?: any, options?: BackendOptions): void;
   read(language: string, namespace: string, callback: ReadCallback): void;
