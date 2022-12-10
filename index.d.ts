@@ -8,7 +8,7 @@ type AddPathOption =
   | string
   | ((language: string, namespace: string) => string)
 
-interface BackendOptions {
+export interface FsBackendOptions {
   /**
    * path where resources get loaded from, or a function
    * returning a path:
@@ -31,11 +31,11 @@ interface BackendOptions {
 }
 
 export default class I18NexFsBackend
-  implements BackendModule<BackendOptions>
+  implements BackendModule<FsBackendOptions>
 {
   static type: "backend";
-  constructor(services?: any, options?: BackendOptions);
-  init(services?: any, options?: BackendOptions): void;
+  constructor(services?: any, options?: FsBackendOptions);
+  init(services?: any, options?: FsBackendOptions): void;
   read(language: string, namespace: string, callback: ReadCallback): void;
   create?(
     languages: string[],
@@ -45,11 +45,5 @@ export default class I18NexFsBackend
   ): void;
   type: "backend";
   services: any;
-  options: BackendOptions;
-}
-
-declare module "i18next" {
-  interface CustomPluginOptions {
-    backend?: BackendOptions;
-  }
+  options: FsBackendOptions;
 }
