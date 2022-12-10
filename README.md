@@ -90,6 +90,25 @@ const Backend = new Backend();
 Backend.init(null, options);
 ```
 
+## TypeScript
+
+To properly type the backend options, you can import the `FsBackendOptions` interface and use it as a generic type parameter to the i18next's `init` method, e.g.:
+
+```ts
+import i18n from 'i18next'
+import FsBackend, { FsBackendOptions } from 'i18next-fs-backend'
+
+i18n
+  .use(FsBackend)
+  .init<FsBackendOptions>({
+    backend: {
+      // fs backend options
+    },
+
+    // other i18next options
+  })
+```
+
 # If set i18next initImmediate option to false it will load the files synchronously
 
 ```js
