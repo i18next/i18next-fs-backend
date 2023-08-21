@@ -2,7 +2,6 @@
 
 [![Actions](https://github.com/i18next/i18next-fs-backend/workflows/node/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3Anode)
 [![Actions deno](https://github.com/i18next/i18next-fs-backend/workflows/deno/badge.svg)](https://github.com/i18next/i18next-fs-backend/actions?query=workflow%3Adeno)
-[![Travis](https://img.shields.io/travis/i18next/i18next-fs-backend/master.svg?style=flat-square)](https://travis-ci.org/i18next/i18next-fs-backend)
 [![npm version](https://img.shields.io/npm/v/i18next-fs-backend.svg?style=flat-square)](https://www.npmjs.com/package/i18next-fs-backend)
 
 This is an i18next backend to be used in Node.js and Deno. It will load resources from the file system.
@@ -14,7 +13,7 @@ It will load resources from filesystem. Right now it supports following filetype
 - .json
 - .json5
 - .yml/.yaml
-- .js/.ts (very limited, checks for `exports` or `export default`)
+- .js (very limited, checks for `exports` or `export default`)
 
 # Getting started
 
