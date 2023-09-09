@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "aws-lambda-fastify": "1.7.0",
-    "fastify": "3.18.0",
+    "fastify": "3.29.4",
     "i18next": "20.3.2",
     "i18next-fs-backend": "1.1.1",
     "i18next-http-middleware": "3.1.4",
