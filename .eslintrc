@@ -12,7 +12,9 @@
     "before": false,
     "after": false,
     "beforeEach": false,
-    "afterEach": false
+    "afterEach": false,
+    "Deno": false,
+    "Bun": false
   },
   "rules": {
     "array-bracket-spacing": 0,

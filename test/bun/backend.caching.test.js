@@ -1,17 +1,14 @@
-import expect from 'expect.js'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { expect, test, describe, beforeEach, afterEach } from "bun:test"
 import i18next from 'i18next'
-import Backend from '../index.js'
-import { removeFile } from '../lib/writeFile.js'
+import Backend from '../../index.js'
+import { removeFile } from '../../lib/writeFile.js'
 
 i18next.init()
 
 describe('BackendConnector as caching layer', () => {
   let connector
 
-  before((done) => {
+  beforeEach((done) => {
     connector = i18next.services.backendConnector
     connector.backend = new Backend(i18next.services, {
       loadPath: `${__dirname}/locales/{{lng}}/{{ns}}.json`,
@@ -21,28 +18,28 @@ describe('BackendConnector as caching layer', () => {
     removeFile(`${__dirname}/locales/de/test_caching.json`).then(done).catch(() => done())
   })
 
-  after((done) => {
+  afterEach((done) => {
     removeFile(`${__dirname}/locales/de/test_caching.json`).then(done).catch(() => done())
   })
 
   describe('caching szenario', () => {
-    it('should work as expected', (done) => {
+    test('should work as expected', (done) => {
       connector.backend.read(['de'], ['test_caching'], (err, ns) => {
-        expect(err).to.be.ok()
+        expect(err).toBeTruthy()
 
         connector.backend.save('de', 'test_caching', { key: 'save in cache' }, (err) => {
-          expect(err).not.to.be.ok()
+          expect(err).toBeFalsy()
 
           connector.backend.read(['de'], ['test_caching'], (err, ns) => {
-            expect(err).not.to.be.ok()
-            expect(ns).to.eql({
+            expect(err).toBeFalsy()
+            expect(ns).toEqual({
               key: 'save in cache'
             })
 
             setTimeout(() => {
               connector.backend.read(['de'], ['test_caching'], (err, ns) => {
                 try {
-                  expect(err).to.be.ok()
+                  expect(err).toBeTruthy()
                   done()
                 } catch (e) {
                   done(e)

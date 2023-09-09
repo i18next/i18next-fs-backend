@@ -1,6 +1,6 @@
 {
-  "type": "common",
+  "type": "commonjs",
   "dependencies": {
-    "i18next": "19.6.3"
+    "i18next": "23.5.1"
   }
 }

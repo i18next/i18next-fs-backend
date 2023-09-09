@@ -1,5 +1,5 @@
 import expect from 'expect.js'
-import { dirname } from 'path';
+import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
