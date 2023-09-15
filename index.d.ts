@@ -28,6 +28,7 @@ export interface FsBackendOptions {
   stringify?(
     data: { [key: string]: any }
   ): string;
+  expirationTime?: number;
 }
 
 export default class I18NexFsBackend
