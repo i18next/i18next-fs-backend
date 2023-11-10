@@ -70,7 +70,7 @@
     "copy:yaml": "cp node_modules/js-yaml/dist/js-yaml.mjs lib/formats/yaml.js",
     "copy": "rm -rf lib/formats && mkdir lib/formats && npm run copy:json5 && npm run copy:yaml",
     "lint": "eslint .",
-    "compile:esm": "rm -rf esm && mkdir esm && BABEL_ENV=esm babel lib -d esm && cp index.d.ts esm/index.d.ts && cp lib/fs.cjs esm/fs.cjs && cp lib/path.cjs esm/path.cjs",
+    "compile:esm": "rm -rf esm && mkdir esm && BABEL_ENV=esm babel lib -d esm && cp index.d.ts esm/index.d.ts && cp index.d.mts esm/index.d.mts && cp lib/fs.cjs esm/fs.cjs && cp lib/path.cjs esm/path.cjs",
     "compile:cjs": "rm -rf cjs && mkdir cjs && BABEL_ENV=cjs babel lib -d cjs && cp index.d.ts cjs/index.d.ts && echo '{\"type\":\"commonjs\"}' > cjs/package.json && cp lib/fs.cjs cjs/fs.js && cp lib/path.cjs cjs/path.js && node -e \"fs.writeFileSync('cjs/readFile.js', fs.readFileSync('cjs/readFile.js').toString().replace('fs.cjs', 'fs.js').replace('path.cjs', 'path.js'))\" && node -e \"fs.writeFileSync('cjs/writeFile.js', fs.readFileSync('cjs/writeFile.js').toString().replace('fs.cjs', 'fs.js'))\"",
     "compile": "npm run copy && npm run compile:esm && npm run compile:cjs",
     "build": "npm run compile",
