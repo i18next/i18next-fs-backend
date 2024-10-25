@@ -28,9 +28,9 @@
   "module": "./esm/index.js",
   "types": "./index.d.mts",
   "devDependencies": {
-    "@babel/cli": "7.24.8",
-    "@babel/core": "7.25.2",
-    "@babel/preset-env": "7.25.2",
+    "@babel/cli": "7.25.9",
+    "@babel/core": "7.25.9",
+    "@babel/preset-env": "7.25.9",
     "babel-plugin-add-module-exports": "1.0.4",
     "dtslint": "4.2.1",
     "eslint": "8.55.0",
@@ -41,14 +41,14 @@
     "eslint-plugin-require-path-exists": "1.1.9",
     "eslint-plugin-standard": "5.0.0",
     "expect.js": "0.3.1",
-    "i18next": "23.12.2",
+    "i18next": "23.16.3",
     "js-yaml": "4.1.0",
     "json5": "2.2.3",
-    "mocha": "10.7.0",
+    "mocha": "10.7.3",
     "tslint": "5.20.1",
-    "tsd": "0.31.1",
-    "typescript": "5.5.4",
-    "uglify-js": "3.19.1"
+    "tsd": "0.31.2",
+    "typescript": "5.6.3",
+    "uglify-js": "3.19.3"
   },
   "description": "i18next-fs-backend is a backend layer for i18next using in Node.js and for Deno to load translations from the filesystem.",
   "keywords": [
