@@ -12,6 +12,7 @@ It will load resources from filesystem. Right now it supports following filetype
 
 - .json
 - .json5
+- .jsonc
 - .yml/.yaml
 - .js (very limited, checks for `exports` or `export default`)
 
