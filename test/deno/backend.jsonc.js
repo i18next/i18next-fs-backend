@@ -7,18 +7,18 @@ import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-test('BackendConnector with json5', async () => {
+test('BackendConnector with jsonc', async () => {
   // before
   i18next.init()
 
   const connector = i18next.services.backendConnector
   connector.backend = new Backend(i18next.services, {
-    loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json5`,
-    addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json5`
+    loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.jsonc`,
+    addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.jsonc`
   })
   await wait(200) // I don't know why, probably because of debouncedWrite
-  await writeFile(`${__dirname}/../locales/en/test.json5`, { key: 'passing' })
-  await writeTextFile(`${__dirname}/../locales/en/test-with-comments.json5`, `{
+  await writeFile(`${__dirname}/../locales/en/test.jsonc`, { key: 'passing' })
+  await writeTextFile(`${__dirname}/../locales/en/test-with-comments.jsonc`, `{
     "key": "passing",
     // line comment
     "commented": "value", /* inline block */
@@ -60,6 +60,14 @@ test('BackendConnector with json5', async () => {
   })
 
   // after
-  await writeFile(`${__dirname}/../locales/en/test.json5`, { key: 'passing' })
+  await writeFile(`${__dirname}/../locales/en/test.jsonc`, { key: 'passing' })
+  await writeTextFile(`${__dirname}/../locales/en/test-with-comments.jsonc`, `{
+    "key": "passing",
+    // line comment
+    "commented": "value", /* inline block */
+    /* block comment
+       multiple lines */
+    "block": "value"
+  }`)
   await wait(500) // I don't know why, probably because of debouncedWrite
 })

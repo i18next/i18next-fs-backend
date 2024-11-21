@@ -1,0 +1,8 @@
+{
+          "key": "passing",
+          // line comment
+          "commented": "value", /* inline block */
+          /* block comment
+             multiple lines */
+          "block": "value"
+        }

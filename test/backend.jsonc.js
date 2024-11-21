@@ -1,7 +1,7 @@
 import expect from 'expect.js'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import fs from 'fs'
+import fs from 'node:fs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
@@ -9,18 +9,18 @@ import { writeFile } from '../lib/writeFile.js'
 
 i18next.init()
 
-describe('BackendConnector with json5', () => {
+describe('BackendConnector with jsonc', () => {
   let connector
 
   before((done) => {
     connector = i18next.services.backendConnector
     connector.backend = new Backend(i18next.services, {
-      loadPath: `${__dirname}/locales/{{lng}}/{{ns}}.json5`,
-      addPath: `${__dirname}/locales/{{lng}}/{{ns}}.json5`
+      loadPath: `${__dirname}/locales/{{lng}}/{{ns}}.jsonc`,
+      addPath: `${__dirname}/locales/{{lng}}/{{ns}}.jsonc`
     })
-    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' })
+    writeFile(`${__dirname}/locales/en/test.jsonc`, { key: 'passing' })
       .then(() => {
-        fs.writeFile(`${__dirname}/locales/en/test-with-comments.json5`, `{
+        fs.writeFile(`${__dirname}/locales/en/test-with-comments.jsonc`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
@@ -33,9 +33,9 @@ describe('BackendConnector with json5', () => {
   })
 
   after((done) => {
-    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' })
+    writeFile(`${__dirname}/locales/en/test.jsonc`, { key: 'passing' })
       .then(() => {
-        fs.writeFile(`${__dirname}/locales/en/test-with-comments.json5`, `{
+        fs.writeFile(`${__dirname}/locales/en/test-with-comments.jsonc`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
