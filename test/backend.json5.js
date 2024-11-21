@@ -1,6 +1,7 @@
 import expect from 'expect.js'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import fs from 'fs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
@@ -17,11 +18,33 @@ describe('BackendConnector with json5', () => {
       loadPath: `${__dirname}/locales/{{lng}}/{{ns}}.json5`,
       addPath: `${__dirname}/locales/{{lng}}/{{ns}}.json5`
     })
-    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' }).then(done).catch(done)
+    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' })
+      .then(() => {
+        fs.writeFile(`${__dirname}/locales/en/test-with-comments.json5`, `{
+          "key": "passing",
+          // line comment
+          "commented": "value", /* inline block */
+          /* block comment
+             multiple lines */
+          "block": "value"
+        }`, done)
+      })
+      .catch(done)
   })
 
   after((done) => {
-    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' }).then(done).catch(done)
+    writeFile(`${__dirname}/locales/en/test.json5`, { key: 'passing' })
+      .then(() => {
+        fs.writeFile(`${__dirname}/locales/en/test-with-comments.json5`, `{
+          "key": "passing",
+          // line comment
+          "commented": "value", /* inline block */
+          /* block comment
+             multiple lines */
+          "block": "value"
+        }`, done)
+      })
+      .catch(done)
   })
 
   describe('#load', () => {
@@ -30,6 +53,18 @@ describe('BackendConnector with json5', () => {
         expect(err).not.to.be.ok()
         expect(connector.store.getResourceBundle('en', 'test')).to.eql({
           key: 'passing'
+        })
+        done()
+      })
+    })
+
+    it('should load data with comments', (done) => {
+      connector.load(['en'], ['test-with-comments'], (err) => {
+        expect(err).not.to.be.ok()
+        expect(connector.store.getResourceBundle('en', 'test-with-comments')).to.eql({
+          key: 'passing',
+          commented: 'value',
+          block: 'value'
         })
         done()
       })
