@@ -9,7 +9,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 test('BackendConnector with yaml', async () => {
   // before
-  i18next.init()
+  i18next.init({ fallbackLng: 'en', ns: 'test' })
 
   const connector = i18next.services.backendConnector
   connector.backend = new Backend(i18next.services, {

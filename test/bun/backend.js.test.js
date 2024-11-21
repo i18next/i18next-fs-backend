@@ -3,7 +3,7 @@ import i18next from 'i18next'
 import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
 
-i18next.init()
+i18next.init({ fallbackLng: 'en', ns: 'test' })
 
 describe.skip('BackendConnector with js', () => {
   let connector

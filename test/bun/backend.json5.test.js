@@ -3,7 +3,7 @@ import i18next from 'i18next'
 import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
 
-i18next.init()
+i18next.init({ fallbackLng: 'en', ns: 'test' })
 
 describe('BackendConnector with json5', () => {
   let connector
@@ -16,14 +16,15 @@ describe('BackendConnector with json5', () => {
     })
     writeFile(`${import.meta.dir}/../locales/en/test.json5`, { key: 'passing' })
       .then(() => {
-        Bun.writeFile(`${import.meta.dir}/../locales/en/test-with-comments.json5`, `{
+        Bun.write(`${import.meta.dir}/../locales/en/test-with-comments.json5`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
           /* block comment
              multiple lines */
           "block": "value"
-        }`, done)
+        }`)
+        done()
       })
       .catch(done)
   })
@@ -31,14 +32,15 @@ describe('BackendConnector with json5', () => {
   afterEach((done) => {
     writeFile(`${import.meta.dir}/../locales/en/test.json5`, { key: 'passing' })
       .then(() => {
-        Bun.writeFile(`${import.meta.dir}/../locales/en/test-with-comments.json5`, `{
+        Bun.write(`${import.meta.dir}/../locales/en/test-with-comments.json5`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
           /* block comment
              multiple lines */
           "block": "value"
-        }`, done)
+        }`)
+        done()
       })
       .catch(done)
   })

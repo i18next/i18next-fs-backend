@@ -2,9 +2,8 @@ import { expect, test, describe, beforeEach, afterEach } from "bun:test"
 import i18next from 'i18next'
 import Backend from '../../index.js'
 import { writeFile } from '../../lib/writeFile.js'
-import fs from 'node:fs'
 
-i18next.init()
+i18next.init({ fallbackLng: 'en', ns: 'test' })
 
 describe('BackendConnector with jsonc', () => {
   let connector
@@ -15,16 +14,17 @@ describe('BackendConnector with jsonc', () => {
       loadPath: `${import.meta.dir}/../locales/{{lng}}/{{ns}}.jsonc`,
       addPath: `${import.meta.dir}/../locales/{{lng}}/{{ns}}.jsonc`
     })
-    writeFile(`${import.meta.dir}/locales/en/test.jsonc`, { key: 'passing' })
+    writeFile(`${import.meta.dir}/../locales/en/test.jsonc`, { key: 'passing' })
       .then(() => {
-        fs.writeFile(`${import.meta.dir}/locales/en/test-with-comments.jsonc`, `{
+        Bun.write(`${import.meta.dir}/../locales/en/test-with-comments.jsonc`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
           /* block comment
              multiple lines */
           "block": "value"
-        }`, done)
+        }`)
+        done()
       })
       .catch(done)
   })
@@ -32,14 +32,15 @@ describe('BackendConnector with jsonc', () => {
   afterEach((done) => {
     writeFile(`${import.meta.dir}/../locales/en/test.jsonc`, { key: 'passing' })
       .then(() => {
-        fs.writeFile(`${import.meta.dir}/../locales/en/test-with-comments.jsonc`, `{
+        Bun.write(`${import.meta.dir}/../locales/en/test-with-comments.jsonc`, `{
           "key": "passing",
           // line comment
           "commented": "value", /* inline block */
           /* block comment
              multiple lines */
           "block": "value"
-        }`, done)
+        }`)
+        done()
       })
       .catch(done)
   })
@@ -57,7 +58,7 @@ describe('BackendConnector with jsonc', () => {
 
     test('should load data with comments', (done) => {
       connector.load(['en'], ['test-with-comments'], (err) => {
-        expect(err).not.toBeFalsy()
+        expect(err).toBeFalsy()
         expect(connector.store.getResourceBundle('en', 'test-with-comments')).toEqual({
           key: 'passing',
           commented: 'value',
