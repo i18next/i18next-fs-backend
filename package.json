@@ -71,7 +71,7 @@
     "fixcjs": "fs.writeFileSync('cjs/writeFile.js', fs.readFileSync('cjs/writeFile.js').toString().replace(`(await Promise.resolve().then(function () {\n  return _interopRequireWildcard(require('node:fs'));\n})).default`, `require('node:fs')`));fs.writeFileSync('cjs/readFile.js', fs.readFileSync('cjs/readFile.js').toString().replace(`(await Promise.resolve().then(function () {\n  return _interopRequireWildcard(require('node:fs'));\n})).default`, `require('node:fs')`))"
   },
   "scripts": {
-    "copy:jsonc": "esbuild node_modules/jsonc-parser/lib/esm/main.js --bundle --format=esm --platform=neutral --banner:js=\"/*\n$(cat node_modules/jsonc-parser/LICENSE.md)*/\" --outfile=lib/formats/jsonc.js",
+    "copy:jsonc": "esbuild node_modules/jsonc-parser/lib/esm/main.js --bundle --format=esm --platform=neutral --banner:js=\"/*\n$(sed 's/\\r$//' node_modules/jsonc-parser/LICENSE.md)\n*/\" --outfile=lib/formats/jsonc.js",
     "copy:json5": "cp node_modules/json5/dist/index.mjs lib/formats/json5.js",
     "copy:yaml": "cp node_modules/js-yaml/dist/js-yaml.mjs lib/formats/yaml.js",
     "copy": "rm -rf lib/formats && mkdir lib/formats && npm run copy:jsonc && npm run copy:json5 && npm run copy:yaml",
