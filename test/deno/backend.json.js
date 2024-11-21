@@ -9,6 +9,8 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 test('BackendConnector with normal json', async () => {
   // before
+  await writeFile(`${__dirname}/../locales/en/test.json`, { key: 'passing' })
+
   i18next.init({ fallbackLng: 'en', ns: 'test' })
 
   const connector = i18next.services.backendConnector
@@ -16,8 +18,6 @@ test('BackendConnector with normal json', async () => {
     loadPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`,
     addPath: `${__dirname}/../locales/{{lng}}/{{ns}}.json`
   })
-  await wait(200) // I don't know why, probably because of debouncedWrite
-  await writeFile(`${__dirname}/../locales/en/test.json`, { key: 'passing' })
 
   // test
   await (new Promise((resolve, reject) => {
