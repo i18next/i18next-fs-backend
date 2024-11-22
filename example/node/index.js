@@ -2,7 +2,7 @@ const i18next = require('i18next')
 const Backend = require('../../cjs')
 
 i18next.use(Backend).init({
-  // initAsync: false,
+  initAsync: false,
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'de'],
