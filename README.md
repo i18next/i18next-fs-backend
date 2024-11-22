@@ -109,7 +109,7 @@ i18n
   })
 ```
 
-# If set i18next initImmediate option to false it will load the files synchronously
+# If set i18next initAsync option to false it will load the files synchronously
 
 ```js
 // i18n.js
@@ -121,7 +121,7 @@ i18next
   .use(Backend)
   .init({
     // debug: true,
-    initImmediate: false,
+    initAsync: false,
     fallbackLng: 'en',
     lng: 'en',
     preload: readdirSync(join(__dirname, '../locales')).filter((fileName) => {

@@ -9,13 +9,13 @@
     "deploy": "npm run cf_package && npm run cf_deploy"
   },
   "dependencies": {
-    "aws-lambda-fastify": "1.7.0",
-    "fastify": "3.29.4",
-    "i18next": "20.3.2",
-    "i18next-fs-backend": "1.1.1",
-    "i18next-http-middleware": "3.1.4",
-    "mjml": "4.10.1",
-    "point-of-view": "4.15.0",
+    "@fastify/aws-lambda": "5.0.0",
+    "fastify": "5.1.0",
+    "i18next": "24.0.0",
+    "i18next-fs-backend": "2.5.0",
+    "i18next-http-middleware": "3.6.0",
+    "mjml": "4.15.3",
+    "@fastify/view": "10.0.1",
     "pug": "3.0.3"
   }
 }

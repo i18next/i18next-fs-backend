@@ -13,7 +13,7 @@ i18next
   .use(Backend)
   .init({
     // debug: true,
-    initImmediate: false, // setting initImediate to false, will load the resources synchronously
+    initAsync: false, // setting initImediate to false, will load the resources synchronously
     fallbackLng: 'en',
     preload: readdirSync(localesFolder).filter((fileName) => {
       const joinedPath = join(localesFolder, fileName)

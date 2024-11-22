@@ -1,6 +1,6 @@
 {
   "type": "commonjs",
   "dependencies": {
-    "i18next": "23.16.6"
+    "i18next": "24.0.0"
   }
 }

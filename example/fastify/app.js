@@ -1,5 +1,5 @@
 import fastify from 'fastify'
-import pov from 'point-of-view'
+import pov from '@fastify/view'
 import pug from 'pug'
 import { register, i18next } from './lib/i18n.js'
 import mail from './lib/mail.js'
@@ -32,7 +32,7 @@ app.get('/', (request, reply) => {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   // called directly
-  app.listen(port, (err) => {
+  app.listen({ port }, (err) => {
     if (err) return console.error(err)
     console.log(i18next.t('server.started', { port }))
     console.log(i18next.t('server.started', { port, lng: 'de' }))

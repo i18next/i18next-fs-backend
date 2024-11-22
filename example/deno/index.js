@@ -5,7 +5,7 @@ import Backend from 'https://deno.land/x/i18next_fs_backend/index.js'
 // import Backend from '../../lib/index.js'
 
 i18next.use(Backend).init({
-  // initImmediate: false,
+  // initAsync: false,
   lng: 'en',
   fallbackLng: 'en',
   preload: ['en', 'de'],
@@ -20,6 +20,6 @@ i18next.use(Backend).init({
   console.log(t('welcome'))
   console.log(t('welcome', { lng: 'de' }))
 })
-// this will only work if initImmediate is set to false, because it's async
+// this will only work if initAsync is set to false, because it's async
 console.log(i18next.t('welcome'))
 console.log(i18next.t('welcome', { lng: 'de' }))
