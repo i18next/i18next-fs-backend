@@ -33,7 +33,7 @@
     "@babel/preset-env": "7.26.0",
     "babel-plugin-add-module-exports": "1.0.4",
     "dtslint": "4.2.1",
-    "esbuild": "0.24.0",
+    "esbuild": "0.25.0",
     "eslint": "8.55.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.31.0",
