@@ -1,3 +1,7 @@
+### 2.6.1
+
+- Bump js-yaml from 4.1.0 to 4.1.1 (#64)
+
 ### 2.6.0
 
 - support `initImmediate` -> `initAsync` renaming of i18next v24
