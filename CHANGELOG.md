@@ -1,4 +1,4 @@
-### 2.6.2
+### 2.6.3
 
 - use own interpolation function instead of relying on i18next's interpolator
 
