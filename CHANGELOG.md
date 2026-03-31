@@ -1,3 +1,7 @@
+### 2.6.2
+
+- use own interpolation function instead of relying on i18next's interpolator
+
 ### 2.6.1
 
 - Bump js-yaml from 4.1.0 to 4.1.1 (#64)
