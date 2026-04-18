@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
-    "lib": ["es6", "dom"],
+    "target": "es2016",
+    "lib": ["es2016", "dom"],
+    "ignoreDeprecations": "6.0",
     "jsx": "react",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
