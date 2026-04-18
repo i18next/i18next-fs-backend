@@ -137,6 +137,55 @@ i18next
   })
 ```
 
+## Security considerations
+
+### Language / namespace values reach the filesystem
+
+`i18next-fs-backend` substitutes the `lng` and `ns` options into the
+configured `loadPath` / `addPath` templates and reads / writes the resulting
+file. If those values come from an untrusted source (HTTP query string,
+cookie, request header), a crafted value could break out of the intended
+locale directory and read or overwrite files elsewhere on disk.
+
+Since **2.6.4**, values containing `..`, `/`, `\`, control characters,
+prototype keys (`__proto__`, `constructor`, `prototype`), or longer than
+128 characters are rejected — the backend refuses to build the filesystem
+path and returns an error to the caller. Any legitimate i18next
+language-code shape (BCP-47, underscores, dots, `+`-joined multi-language
+requests) is still accepted.
+
+This is a defence-in-depth layer. It does **not** replace the usual
+responsibility to validate `lng` / `ns` at your application boundary —
+especially when either comes from user input.
+
+### `.js` / `.ts` locale files are executed via `eval`
+
+The backend supports loading translation data from `.js` and `.ts` files by
+`eval`-ing their content. This is an intentional feature — it allows
+expressions, comments, and module-style default exports in locale files —
+but it carries a real trust requirement:
+
+> **Treat every `.js` / `.ts` locale file as code that will run with the
+> full privileges of your Node process**, including access to
+> `process.env`, the filesystem, and the network.
+
+Concretely that means:
+
+- Never load `.js` / `.ts` locale files from an untrusted or writable
+  source (user uploads, compromised CDN, shared-mount drops).
+- If your build / deploy pipeline produces locale files, secure the
+  pipeline the same way you would secure any code-producing pipeline
+  (signed commits, reviewed merges, protected branches).
+- Prefer **JSON / JSON5 / YAML / JSONC** for locale files whenever you
+  don't need expression-level dynamism — those formats are parsed, not
+  executed.
+
+### Reporting a vulnerability
+
+Please **do not** open a public GitHub issue for security problems. Send
+reports privately via the [GitHub Security Advisories](https://github.com/i18next/i18next-fs-backend/security/advisories/new)
+flow on the repository.
+
 ---
 
 <h3 align="center">Gold Sponsors</h3>
