@@ -1,3 +1,7 @@
+### 2.6.5
+
+- fix: allow forward slashes in `ns` values so nested namespace names (mapping to subfolder locale files such as `public/locales/en/a/b.json`) load correctly again. 2.6.4's security fix applied the same strict path-segment check to both `lng` and `ns`, which was correct for `lng` (no BCP-47 shape contains `/`) but over-strict for `ns` — nested namespaces are a documented i18next pattern. `isSafePathSegment` is now split into `isSafeLangSegment` (strict — still rejects `/`) and `isSafeNsSegment` (loose — allows `/` but still rejects `..`, `\`, control chars, prototype keys, and oversized inputs). `isSafePathSegment` is kept as a backwards-compatible alias for the strict check. The 2.6.4 security fix remains in force for every concrete attack pattern from the original advisory. Fixes [#74](https://github.com/i18next/i18next-fs-backend/issues/74).
+
 ### 2.6.4
 
 Security release — all issues found via an internal audit. See published advisory [GHSA-8847-338w-5hcj](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-8847-338w-5hcj).

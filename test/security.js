@@ -4,32 +4,56 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
-import { isSafePathSegment, interpolate, interpolatePath } from '../lib/utils.js'
+import { isSafeLangSegment, isSafeNsSegment, isSafePathSegment, interpolate, interpolatePath } from '../lib/utils.js'
 
 // Security tests for fixes shipped in the 2.6.x patch release.
 // See CHANGELOG for associated GHSA advisory.
 
 describe('security', () => {
-  describe('isSafePathSegment', () => {
+  describe('isSafeLangSegment (strict — for `lng`)', () => {
     it('accepts arbitrary language-code shapes', () => {
-      expect(isSafePathSegment('en')).to.be(true)
-      expect(isSafePathSegment('de-DE')).to.be(true)
-      expect(isSafePathSegment('en_US')).to.be(true)
-      expect(isSafePathSegment('zh-Hant-HK')).to.be(true)
-      expect(isSafePathSegment('pirate-speak')).to.be(true)
-      expect(isSafePathSegment('my-custom.ns')).to.be(true)
+      expect(isSafeLangSegment('en')).to.be(true)
+      expect(isSafeLangSegment('de-DE')).to.be(true)
+      expect(isSafeLangSegment('en_US')).to.be(true)
+      expect(isSafeLangSegment('zh-Hant-HK')).to.be(true)
+      expect(isSafeLangSegment('pirate-speak')).to.be(true)
+      expect(isSafeLangSegment('my-custom.ns')).to.be(true)
     })
 
     it('rejects path-traversal / separator / control-char payloads', () => {
-      expect(isSafePathSegment('../etc/passwd')).to.be(false)
-      expect(isSafePathSegment('..')).to.be(false)
-      expect(isSafePathSegment('foo/bar')).to.be(false)
-      expect(isSafePathSegment('foo\\bar')).to.be(false)
-      expect(isSafePathSegment('en\r\n')).to.be(false)
-      expect(isSafePathSegment('en\u0000')).to.be(false)
-      expect(isSafePathSegment('__proto__')).to.be(false)
-      expect(isSafePathSegment('')).to.be(false)
-      expect(isSafePathSegment('a'.repeat(200))).to.be(false)
+      expect(isSafeLangSegment('../etc/passwd')).to.be(false)
+      expect(isSafeLangSegment('..')).to.be(false)
+      expect(isSafeLangSegment('foo/bar')).to.be(false)
+      expect(isSafeLangSegment('foo\\bar')).to.be(false)
+      expect(isSafeLangSegment('en\r\n')).to.be(false)
+      expect(isSafeLangSegment('en\u0000')).to.be(false)
+      expect(isSafeLangSegment('__proto__')).to.be(false)
+      expect(isSafeLangSegment('')).to.be(false)
+      expect(isSafeLangSegment('a'.repeat(200))).to.be(false)
+    })
+
+    it('is still exported as `isSafePathSegment` for 2.6.4 backwards compat', () => {
+      expect(isSafePathSegment).to.be(isSafeLangSegment)
+    })
+  })
+
+  describe('isSafeNsSegment (loose — for `ns`, allows `/`)', () => {
+    it('accepts nested namespace names with forward slashes (issue #74)', () => {
+      expect(isSafeNsSegment('a/b')).to.be(true)
+      expect(isSafeNsSegment('foo/bar/baz')).to.be(true)
+      expect(isSafeNsSegment('common')).to.be(true)
+    })
+
+    it('still rejects directory escape and all other concrete attacks', () => {
+      expect(isSafeNsSegment('..')).to.be(false)
+      expect(isSafeNsSegment('../etc/passwd')).to.be(false)
+      expect(isSafeNsSegment('a/../b')).to.be(false)
+      expect(isSafeNsSegment('foo\\bar')).to.be(false)
+      expect(isSafeNsSegment('ns\r\n')).to.be(false)
+      expect(isSafeNsSegment('ns\u0000')).to.be(false)
+      expect(isSafeNsSegment('__proto__')).to.be(false)
+      expect(isSafeNsSegment('')).to.be(false)
+      expect(isSafeNsSegment('a'.repeat(200))).to.be(false)
     })
   })
 
@@ -60,10 +84,26 @@ describe('security', () => {
       expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: '..' }))
         .to.equal(null)
     })
-    it('returns null for path separators', () => {
+    it('returns null for path separators in lng (strict)', () => {
       expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en/../', ns: 'x' }))
         .to.equal(null)
       expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en\\x', ns: 'x' }))
+        .to.equal(null)
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en/foo', ns: 'x' }))
+        .to.equal(null)
+    })
+    it('accepts nested ns with `/` (issue #74 — 2.6.5 regression fix)', () => {
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: 'a/b' }))
+        .to.equal('/locales/en/a/b.json')
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: 'foo/bar/baz' }))
+        .to.equal('/locales/en/foo/bar/baz.json')
+    })
+    it('still returns null for ns with `..` or `\\` — nested ns does not weaken the fix', () => {
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: 'a/../b' }))
+        .to.equal(null)
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: '..' }))
+        .to.equal(null)
+      expect(interpolatePath('/locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: 'a\\b' }))
         .to.equal(null)
     })
     it('returns null when a segment of a + join is unsafe', () => {
@@ -92,7 +132,7 @@ describe('security', () => {
       })
     })
 
-    it('does not read when ns contains a slash', (done) => {
+    it('does not read when ns contains directory-escape', (done) => {
       backend.read('en', '../../etc/passwd', (err, data) => {
         expect(err).to.be.an(Error)
         expect(err.message).to.contain('unsafe lng/ns')
