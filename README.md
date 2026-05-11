@@ -16,6 +16,10 @@ It will load resources from filesystem. Right now it supports following filetype
 - .yml/.yaml
 - .js (very limited, checks for `exports` or `export default`)
 
+## Advice:
+
+If you don't like to manage your translation files manually or are simply looking for a [better management solution](https://www.locize.com?utm_source=i18next_fs_backend_readme&utm_medium=github&utm_campaign=readme), take a look at [i18next-locize-backend](https://github.com/locize/i18next-locize-backend). The i18next [backend plugin](https://www.i18next.com/overview/plugins-and-utils#backends) for 🌐 [Locize](https://www.locize.com?utm_source=i18next_fs_backend_readme&utm_medium=github&utm_campaign=readme) ☁️.
+
 # Getting started
 
 ```bash
