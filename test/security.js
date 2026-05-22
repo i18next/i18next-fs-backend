@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
-import { isSafeLangSegment, isSafeNsSegment, isSafePathSegment, interpolate, interpolatePath } from '../lib/utils.js'
+import { isSafeLangSegment, isSafeNsSegment, isSafePathSegment, interpolate, interpolatePath, setPath, pushPath } from '../lib/utils.js'
 
 // Security tests for fixes shipped in the 2.6.x patch release.
 // See CHANGELOG for associated GHSA advisory.
@@ -109,6 +109,77 @@ describe('security', () => {
     it('returns null when a segment of a + join is unsafe', () => {
       expect(interpolatePath('/locales/{{lng}}.json', { lng: 'en+../etc/passwd' }))
         .to.equal(null)
+    })
+  })
+
+  describe('setPath / pushPath prototype-pollution guards', () => {
+    // Reachable via i18next-http-middleware's missingKeyHandler when the
+    // attacker controls a missing-key string: writeFile() splits the key on
+    // the configured keySeparator (default `.`), so a key like
+    // `__proto__.polluted` becomes path `['__proto__','polluted']`, and the
+    // old getLastOfPath() walked straight into Object.prototype.
+
+    afterEach(() => {
+      // make sure no test leaks pollution into the rest of the suite
+      delete Object.prototype.polluted
+      delete Object.prototype.isAdmin
+    })
+
+    it('setPath drops writes whose path traverses __proto__', () => {
+      const data = {}
+      setPath(data, ['__proto__', 'polluted'], 'PWNED')
+      expect(({}).polluted).to.be(undefined)
+      expect(Object.prototype.polluted).to.be(undefined)
+      expect(data).to.eql({})
+    })
+
+    it('setPath drops writes whose path traverses constructor / prototype', () => {
+      const data = {}
+      setPath(data, ['constructor', 'prototype', 'polluted'], 'PWNED')
+      setPath(data, ['prototype', 'polluted'], 'PWNED')
+      expect(({}).polluted).to.be(undefined)
+      expect(Object.prototype.polluted).to.be(undefined)
+      expect(data).to.eql({})
+    })
+
+    it('setPath drops a write whose final segment is an unsafe key', () => {
+      const data = {}
+      setPath(data, ['en', 'translation', '__proto__'], { isAdmin: true })
+      expect(({}).isAdmin).to.be(undefined)
+      expect(Object.prototype.isAdmin).to.be(undefined)
+    })
+
+    it('setPath still writes legitimate nested paths', () => {
+      const data = {}
+      setPath(data, ['en', 'translation', 'greeting'], 'hello')
+      expect(data.en.translation.greeting).to.equal('hello')
+    })
+
+    it('setPath handles string paths split by `.` safely', () => {
+      const data = {}
+      setPath(data, '__proto__.polluted', 'PWNED')
+      expect(({}).polluted).to.be(undefined)
+      expect(data).to.eql({})
+    })
+
+    it('pushPath drops writes whose path traverses unsafe keys', () => {
+      const data = {}
+      pushPath(data, ['__proto__', 'polluted'], 'PWNED')
+      expect(({}).polluted).to.be(undefined)
+      expect(Object.prototype.polluted).to.be(undefined)
+      expect(data).to.eql({})
+    })
+
+    it('end-to-end: writeFile()-style key split does not pollute Object.prototype', () => {
+      // Simulates: missing.key = '__proto__.polluted', keySeparator = '.'
+      //   const path = missing.key.split(keySeparator || '.')
+      //   setPath(data, path, missing.fallbackValue)
+      const data = {}
+      const attackerKey = '__proto__.polluted'
+      const path = attackerKey.split('.')
+      setPath(data, path, 'PWNED')
+      expect(({}).polluted).to.be(undefined)
+      expect(Object.prototype.polluted).to.be(undefined)
     })
   })
 
