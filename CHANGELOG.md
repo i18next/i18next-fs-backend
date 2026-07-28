@@ -1,3 +1,8 @@
+### 2.6.7
+
+- security (defence-in-depth): `write()` iterates own enumerable keys of `queuedWrites` instead of using `for...in`. `for...in` walks the prototype chain, so an `Object.prototype` polluted by any other library in the process was iterated here and turned into `writeFile()` calls. `setPath` / `pushPath` already refuse to create unsafe own keys and `interpolatePath` still validates before anything is written, so this closes an amplification path rather than a traversal.
+- docs: corrected the security section of the README, which still claimed `/` is rejected in both `lng` and `ns`. That has not been true since 2.6.5, which allows `/` in `ns` so nested namespace names such as `a/b` map to subfolder layouts. The per-key split is now described accurately.
+
 ### 2.6.6
 
 Security release — coordinated disclosure from [@codeswhite](https://github.com/codeswhite). See published advisory [GHSA-2933-q333-qg83](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-2933-q333-qg83).

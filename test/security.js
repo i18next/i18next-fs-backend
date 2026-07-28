@@ -224,4 +224,40 @@ describe('security', () => {
       })
     })
   })
+
+  describe('Backend.write does not act on inherited keys', () => {
+    let backend
+    before(() => {
+      backend = new Backend(i18next.services, {
+        loadPath: `${__dirname}/locales/{{lng}}/{{ns}}.json`,
+        addPath: `${__dirname}/locales/{{lng}}/{{ns}}.json`
+      }, {})
+    })
+
+    afterEach(() => {
+      delete Object.prototype.polluted
+    })
+
+    it('ignores an Object.prototype key polluted by another library', () => {
+      const written = []
+      backend.writeFile = (lng, ns) => written.push([lng, ns])
+      backend.queuedWrites = {}
+
+      // simulates a third party having polluted Object.prototype: `for...in`
+      // over queuedWrites would pick this up and turn it into a file write
+      Object.prototype.polluted = { translation: [] } // eslint-disable-line no-extend-native
+
+      backend.write()
+      expect(written).to.eql([])
+    })
+
+    it('still writes the queued own keys', () => {
+      const written = []
+      backend.writeFile = (lng, ns) => written.push([lng, ns])
+      backend.queuedWrites = { en: { translation: [] }, locks: { en: { translation: true } } }
+
+      backend.write()
+      expect(written).to.eql([['en', 'translation']])
+    })
+  })
 })

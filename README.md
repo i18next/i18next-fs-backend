@@ -153,12 +153,18 @@ file. If those values come from an untrusted source (HTTP query string,
 cookie, request header), a crafted value could break out of the intended
 locale directory and read or overwrite files elsewhere on disk.
 
-Since **2.6.4**, values containing `..`, `/`, `\`, control characters,
-prototype keys (`__proto__`, `constructor`, `prototype`), or longer than
-128 characters are rejected — the backend refuses to build the filesystem
-path and returns an error to the caller. Any legitimate i18next
-language-code shape (BCP-47, underscores, dots, `+`-joined multi-language
-requests) is still accepted.
+Since **2.6.4**, values containing `..`, `\`, control characters, prototype
+keys (`__proto__`, `constructor`, `prototype`), or longer than 128
+characters are rejected — the backend refuses to build the filesystem path
+and returns an error to the caller. Any legitimate i18next language-code
+shape (BCP-47, underscores, dots, `+`-joined multi-language requests) is
+still accepted.
+
+`/` is handled per key: it is rejected in `lng`, since no legitimate
+language-code shape contains one, and allowed in `ns` since **2.6.5**, so
+that nested namespace names such as `a/b` keep mapping to subfolder layouts
+like `public/locales/en/a/b.json`. Directory escape stays blocked in both
+cases, because `..` and `\` are still rejected.
 
 This is a defence-in-depth layer. It does **not** replace the usual
 responsibility to validate `lng` / `ns` at your application boundary —
