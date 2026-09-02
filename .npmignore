@@ -13,3 +13,6 @@ tsconfig.json
 example
 .babelrc
 deno.lock
+tslint.json
+*.pem
+*.key
