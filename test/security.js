@@ -155,6 +155,25 @@ describe('security', () => {
       expect(data.en.translation.greeting).to.equal('hello')
     })
 
+    it('setPath does not pollute inherited Object.prototype members (GHSA-cchx-rhgv-92hj)', () => {
+      // getLastOfPath's `!object[key]` existence test was truthy for inherited
+      // members, so a missing key like 'hasOwnProperty.call' walked into
+      // Object.prototype and overwrote hasOwnProperty.call — breaking the very
+      // guard i18next core runs, 500'ing every request until restart.
+      for (const k of ['hasOwnProperty', 'valueOf', 'toString', 'isPrototypeOf', 'propertyIsEnumerable']) {
+        setPath({ greeting: 'Hello' }, [k, 'call'], 'PWNED')
+        expect(typeof Object.prototype.hasOwnProperty.call).to.equal('function')
+        expect(typeof ({})[k]).to.equal('function')
+        expect(Object.prototype.hasOwnProperty.call({ a: 1 }, 'a')).to.be(true)
+      }
+    })
+
+    it('pushPath does not pollute inherited Object.prototype members (GHSA-cchx-rhgv-92hj)', () => {
+      pushPath({}, ['hasOwnProperty', 'call'], 'PWNED')
+      expect(typeof Object.prototype.hasOwnProperty.call).to.equal('function')
+      expect(Object.prototype.hasOwnProperty.call({ a: 1 }, 'a')).to.be(true)
+    })
+
     it('setPath handles string paths split by `.` safely', () => {
       const data = {}
       setPath(data, '__proto__.polluted', 'PWNED')
