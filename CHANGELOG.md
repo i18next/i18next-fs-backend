@@ -1,3 +1,7 @@
+### 2.6.9
+
+- security (defence-in-depth): `interpolatePath` now refuses a path whose root differs from the template's root. The per-value checks only looked at each `lng` / `ns` on its own, so with a `loadPath` / `addPath` template that starts with the placeholder, a value could change what kind of path the result is: ns `/etc/foo` made `{{ns}}/{{lng}}.json` absolute (`/etc/foo/en.json`), lng `C:` did the same on Windows (`C:/...`), and ns `/host/share` after a leading `/` (or `//host/share` at the start) became a Windows UNC path to another machine. Reachable when `lng` / `ns` come from the request, e.g. via `i18next-http-middleware`. The default `/locales/{{lng}}/{{ns}}.json`, `join(__dirname, ...)` templates, and nested namespaces such as `a/b` are not affected. Same class as i18next-http-backend's GHSA-9jhj-wvmw-cfx5. The README's security section is updated to match.
+
 ### 2.6.8
 
 Security release. Coordinated disclosure from [@adamyordan](https://github.com/adamyordan). See published advisory [GHSA-cchx-rhgv-92hj](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-cchx-rhgv-92hj).

@@ -110,6 +110,29 @@ describe('security', () => {
       expect(interpolatePath('/locales/{{lng}}.json', { lng: 'en+../etc/passwd' }))
         .to.equal(null)
     })
+    it('returns null when a value changes the root of the path', () => {
+      // relative template made absolute
+      expect(interpolatePath('{{ns}}/{{lng}}.json', { lng: 'en', ns: '/etc/foo' }))
+        .to.equal(null)
+      // Windows drive letter
+      expect(interpolatePath('{{lng}}/{{ns}}.json', { lng: 'C:', ns: 'Windows/x' }))
+        .to.equal(null)
+      // Windows UNC share
+      expect(interpolatePath('/{{ns}}/{{lng}}.json', { lng: 'en', ns: '/evil.example/share' }))
+        .to.equal(null)
+      expect(interpolatePath('{{ns}}/{{lng}}.json', { lng: 'en', ns: '//evil.example/share' }))
+        .to.equal(null)
+    })
+    it('still accepts leading-placeholder, absolute and drive-letter templates with safe values', () => {
+      expect(interpolatePath('{{ns}}/{{lng}}.json', { lng: 'en', ns: 'a/b' }))
+        .to.equal('a/b/en.json')
+      expect(interpolatePath('/{{ns}}/{{lng}}.json', { lng: 'en', ns: 'common' }))
+        .to.equal('/common/en.json')
+      expect(interpolatePath('C:\\locales\\{{lng}}\\{{ns}}.json', { lng: 'en', ns: 'common' }))
+        .to.equal('C:\\locales\\en\\common.json')
+      expect(interpolatePath('./locales/{{lng}}/{{ns}}.json', { lng: 'en', ns: '/x' }))
+        .to.equal('./locales/en//x.json')
+    })
   })
 
   describe('setPath / pushPath prototype-pollution guards', () => {

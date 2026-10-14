@@ -166,6 +166,12 @@ that nested namespace names such as `a/b` keep mapping to subfolder layouts
 like `public/locales/en/a/b.json`. Directory escape stays blocked in both
 cases, because `..` and `\` are still rejected.
 
+Since **2.6.9**, the interpolated path must also keep the root of the
+template. With a template that starts with the placeholder, a value such
+as `/etc/foo` (or `C:` on Windows) would otherwise turn a relative path
+absolute, and `/host/share` after a leading `/` would turn it into a
+Windows UNC path. Such paths are refused.
+
 This is a defence-in-depth layer. It does **not** replace the usual
 responsibility to validate `lng` / `ns` at your application boundary —
 especially when either comes from user input.
