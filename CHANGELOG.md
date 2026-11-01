@@ -1,3 +1,7 @@
+### 2.6.10
+
+- fix: i18next 26.7.0 deprecates guessing the calling convention of a backend from the number of parameters of its methods; the backend now declares it with `callbackApi`, so i18next calls `read` and `create` with a callback (and passes `create` its options), and debug mode no longer logs the deprecation notice. Older i18next versions ignore it.
+
 ### 2.6.9
 
 - security (defence-in-depth): `interpolatePath` now refuses a path whose root differs from the template's root. The per-value checks only looked at each `lng` / `ns` on its own, so with a `loadPath` / `addPath` template that starts with the placeholder, a value could change what kind of path the result is: ns `/etc/foo` made `{{ns}}/{{lng}}.json` absolute (`/etc/foo/en.json`), lng `C:` did the same on Windows (`C:/...`), and ns `/host/share` after a leading `/` (or `//host/share` at the start) became a Windows UNC path to another machine. Reachable when `lng` / `ns` come from the request, e.g. via `i18next-http-middleware`. The default `/locales/{{lng}}/{{ns}}.json`, `join(__dirname, ...)` templates, and nested namespaces such as `a/b` are not affected. Same class as i18next-http-backend's GHSA-9jhj-wvmw-cfx5. The README's security section is updated to match.
