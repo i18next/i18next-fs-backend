@@ -1,6 +1,6 @@
 {
   "name": "i18next-fs-backend",
-  "version": "2.6.9",
+  "version": "2.6.10",
   "private": false,
   "type": "module",
   "main": "./cjs/index.js",
