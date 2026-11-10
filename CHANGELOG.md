@@ -1,3 +1,9 @@
+### 2.6.11
+
+Security release. Coordinated disclosure from [@0x5t4l1n](https://github.com/0x5t4l1n). See advisory [GHSA-c8x8-9354-6f5m](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-c8x8-9354-6f5m).
+
+- security: the write locks now live in their own map instead of under a `locks` key of the queue of pending missing-key writes, so no language code can collide with them. The language code `locks` passed the path checks, so its queued keys landed in the lock map: they were never written, and a later write for a language named like one of those namespaces (`lng=locks` then `lng=translation`, both with ns `translation`) threw `Cannot create property "translation" here since object is an array` from the debounce timer, which nothing can catch, so the Node.js process exited. `lng=locks` with a namespace named like an already written language threw `obj[k].push is not a function` instead. Reachable when `lng` comes from the request and missing keys are saved to it, e.g. via `i18next-http-middleware`'s `missingKeyHandler`, or with `saveMissing` and `saveMissingTo: 'current'` / `'all'` and no `supportedLngs`. `locks` is now handled like any other language code. Credit: [@0x5t4l1n](https://github.com/0x5t4l1n) ([GHSA-c8x8-9354-6f5m](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-c8x8-9354-6f5m)).
+
 ### 2.6.10
 
 - fix: i18next 26.7.0 deprecates guessing the calling convention of a backend from the number of parameters of its methods; the backend now declares it with `callbackApi`, so i18next calls `read` and `create` with a callback (and passes `create` its options), and debug mode no longer logs the deprecation notice. Older i18next versions ignore it.

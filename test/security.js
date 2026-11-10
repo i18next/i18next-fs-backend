@@ -1,5 +1,7 @@
 import expect from 'expect.js'
-import { dirname } from 'path'
+import { dirname, join } from 'path'
+import { mkdtempSync, readFileSync, rmSync } from 'fs'
+import { tmpdir } from 'os'
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
@@ -296,10 +298,42 @@ describe('security', () => {
     it('still writes the queued own keys', () => {
       const written = []
       backend.writeFile = (lng, ns) => written.push([lng, ns])
-      backend.queuedWrites = { en: { translation: [] }, locks: { en: { translation: true } } }
+      backend.queuedWrites = { en: { translation: [] } }
 
       backend.write()
       expect(written).to.eql([['en', 'translation']])
+    })
+  })
+
+  describe('lng `locks` does not collide with the write locks (GHSA-c8x8-9354-6f5m)', () => {
+    let dir
+    before(() => {
+      dir = mkdtempSync(join(tmpdir(), 'i18next-fs-backend-locks-'))
+    })
+    after(() => {
+      rmSync(dir, { recursive: true, force: true })
+    })
+
+    it('writes lng `locks` like any other language and does not crash on a lng named like a namespace', (done) => {
+      const backend = new Backend(null, {
+        loadPath: join(dir, '{{lng}}/{{ns}}.json'),
+        addPath: join(dir, '{{lng}}/{{ns}}.missing.json')
+      })
+      // en first, so the lock map has an entry that `lng=locks, ns=en` used to push into
+      const read = (lng, ns) => JSON.parse(readFileSync(join(dir, `${lng}/${ns}.missing.json`), 'utf8'))
+      backend.create(['en'], 'translation', 'a', 'A', () => {
+        let todo = 3
+        const check = () => {
+          if (--todo) return
+          expect(read('locks', 'en')).to.eql({ b: 'B' })
+          expect(read('locks', 'translation')).to.eql({ c: 'C' })
+          expect(read('translation', 'translation')).to.eql({ d: 'D' })
+          done()
+        }
+        backend.create(['locks'], 'en', 'b', 'B', check) // used to throw `obj[k].push is not a function`
+        backend.create(['locks'], 'translation', 'c', 'C', check)
+        backend.create(['translation'], 'translation', 'd', 'D', check) // used to throw from the debounce timer and exit the process
+      })
     })
   })
 })
