@@ -5,9 +5,9 @@ import mjml2html from 'mjml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-export default (template, data) => {
+export default async (template, data) => {
   const mjml = pug.renderFile(join(__dirname, '../mails', `${template}.pug`), data)
-  const { html, errors } = mjml2html(mjml)
+  const { html, errors } = await mjml2html(mjml)
   if (errors && errors.length > 0) throw new Error(errors[0].message)
   return html
 }

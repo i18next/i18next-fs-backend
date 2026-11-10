@@ -10,8 +10,8 @@ const app = fastify()
 app.register(pov, { engine: { pug } })
 register(app)
 
-app.get('/email', (request, reply) => {
-  const html = mail('invitation', {
+app.get('/email', async (request, reply) => {
+  const html = await mail('invitation', {
     title: request.t('invitation.subject'),
     t: request.t,
     firstname: request.query.name,

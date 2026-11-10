@@ -3,8 +3,8 @@
   "dependencies": {
     "i18next": "23.16.6",
     "i18next-chained-backend": "4.6.2",
-    "i18next-fs-backend": "2.6.4",
-    "i18next-http-backend": "3.0.5"
+    "i18next-fs-backend": "2.6.11",
+    "i18next-http-backend": "4.0.10"
   },
   "devDependencies": {
     "express": "4.21.1"
