@@ -1,3 +1,9 @@
+### 2.6.12
+
+Security release. Reported by [@taxor03](https://github.com/taxor03). See advisory [GHSA-rfjm-638j-4cx4](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-rfjm-638j-4cx4).
+
+- security: the vendored YAML parser (`lib/formats/yaml.js` and its `cjs/` and `esm/` builds) is now js-yaml 4.3.2. Up to 2.6.11 it was still js-yaml 4.1.1, which four published advisories cover (CPU exhaustion from crafted merge keys, aliases and `!!omap`: [GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68), [GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m), [GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj), [GHSA-2883-xcg3-v3hh](https://github.com/advisories/GHSA-2883-xcg3-v3hh)). Since the parser is bundled, `npm audit` and similar tools could not flag it. It only parses `.yml` / `.yaml` translation files at your own `loadPath`, and missing keys written to `addPath` are quoted by the dumper, so they cannot inject merge keys or aliases; this matters if your app loads YAML translation files it does not fully control. The vendored file carries a `js-yaml <version>` banner again.
+
 ### 2.6.11
 
 Security release. Coordinated disclosure from [@0x5t4l1n](https://github.com/0x5t4l1n). See advisory [GHSA-c8x8-9354-6f5m](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-c8x8-9354-6f5m).

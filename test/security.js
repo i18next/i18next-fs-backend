@@ -336,4 +336,17 @@ describe('security', () => {
       })
     })
   })
+
+  // lib/formats is copied from node_modules at build time, so a node_modules older than the
+  // pins in package.json (e.g. after a package.json-only Dependabot bump) ships stale parsers:
+  // 2.6.11 shipped js-yaml 4.1.1 while package.json pinned 4.3.2 (GHSA-rfjm-638j-4cx4).
+  describe('vendored format parsers match the pinned devDependencies', () => {
+    const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
+    for (const dep of ['js-yaml', 'json5', 'jsonc-parser']) {
+      it(`installed ${dep} is the pinned version`, () => {
+        const installed = JSON.parse(readFileSync(join(__dirname, '../node_modules', dep, 'package.json'), 'utf8')).version
+        expect(installed).to.be(pkg.devDependencies[dep])
+      })
+    }
+  })
 })
