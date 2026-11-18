@@ -1,4 +1,4 @@
-### Unreleased
+### 2.6.13
 
 - fix: `.yml` / `.yaml` files written to `addPath` now follow the `ident` option. The YAML dumper got `{ ident: options.indent }` instead of `{ indent: options.ident }`, so YAML files always had 2 spaces. With the default `ident: 2` nothing changes. Thanks [@Vineet829](https://github.com/Vineet829) ([#92](https://github.com/i18next/i18next-fs-backend/pull/92))
 
