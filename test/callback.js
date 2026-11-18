@@ -37,3 +37,24 @@ describe('a read callback that throws', () => {
     expect(unhandled.message).to.be('callback failed')
   })
 })
+
+describe('an expired file whose addPath function throws', () => {
+  const loadPath = `${__dirname}/locales/{{lng}}/{{ns}}.json`
+  const addPath = () => { throw new Error('addPath failed') }
+
+  it('calls back with that error when reading synchronously', () => {
+    const backend = new Backend({}, { loadPath, addPath, expirationTime: 1 }, { initAsync: false })
+    const errors = []
+    backend.read('en', 'test', (err) => errors.push(err))
+    expect(errors).to.have.length(1)
+    expect(errors[0].message).to.be('addPath failed')
+  })
+
+  it('calls back with that error when reading asynchronously', (done) => {
+    const backend = new Backend({}, { loadPath, addPath, expirationTime: 1 })
+    backend.read('en', 'test', (err) => {
+      expect(err.message).to.be('addPath failed')
+      done()
+    })
+  })
+})
