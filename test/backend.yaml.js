@@ -1,6 +1,7 @@
 import expect from 'expect.js'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import fs from 'fs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
@@ -49,6 +50,15 @@ describe('BackendConnector with yaml', () => {
           done()
         })
       })
+    })
+  })
+
+  describe('#writeFile', () => {
+    it('should indent with the ident option', (done) => {
+      writeFile(`${__dirname}/locales/en/test.yaml`, { key: { nested: 'passing' } }, { ident: 4 }).then(() => {
+        expect(fs.readFileSync(`${__dirname}/locales/en/test.yaml`, 'utf8')).to.be('key:\n    nested: passing\n')
+        done()
+      }).catch(done)
     })
   })
 })
