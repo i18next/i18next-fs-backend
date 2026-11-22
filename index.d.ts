@@ -42,7 +42,8 @@ export default class I18NexFsBackend
     languages: string[],
     namespace: string,
     key: string,
-    fallbackValue: string
+    fallbackValue: string,
+    callback?: () => void
   ): void;
   type: "backend";
   services: any;

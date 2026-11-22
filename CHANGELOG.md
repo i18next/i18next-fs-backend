@@ -1,3 +1,7 @@
+### Unreleased
+
+- fix(types): `create` declares its optional fifth parameter, the callback it calls once the key is written for every language. i18next 27.2.4 passes it to backends that set `callbackApi: true`.
+
 ### 2.7.0
 
 - fix: `read` calls back only once when the callback throws. It called it a second time with the thrown error, so i18next marked a namespace that had loaded as failed. An error thrown by your `init` / `loadNamespaces` callback or a `loaded` listener now reaches your app: thrown from the call that started the load with `initAsync: false`, otherwise an unhandled rejection, which ends a Node.js process unless you handle `unhandledRejection`. An error from an `addPath` function while an expired file is removed still goes to the callback. i18next 27.2.0 made the same change in its backend connector. Thanks [@SudeepGowda55](https://github.com/SudeepGowda55) ([#93](https://github.com/i18next/i18next-fs-backend/pull/93))

@@ -6,3 +6,6 @@ i18next.use(Backend).init({
     loadPath: '/locales/{{lng}}/{{ns}}.json'
   },
 });
+
+// create calls back once every language is written to addPath
+new Backend().create?.(['en'], 'translation', 'key', 'value', () => {});

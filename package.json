@@ -82,7 +82,7 @@
     "compile": "npm run copy && npm run compile:esm && npm run compile:cjs",
     "build": "npm run compile",
     "test": "npm run lint && npm run build && mocha test -R spec --exit --experimental-modules && npm run test:typescript",
-    "test:typescript": "tslint --project tsconfig.json && tsd",
+    "test:typescript": "tslint --project tsconfig.json && tsc --noEmit && tsd",
     "test:deno": "deno test test/deno/*.js --allow-read --allow-write --no-check",
     "test:bun": "bun test test/bun/*.js",
     "preversion": "npm run test && npm run build && git push",
