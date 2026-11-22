@@ -1,4 +1,4 @@
-### Unreleased
+### 2.7.1
 
 - fix(types): `create` declares its optional fifth parameter, the callback it calls once the key is written for every language. i18next 27.2.4 passes it to backends that set `callbackApi: true`.
 
