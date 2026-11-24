@@ -1,3 +1,10 @@
+### 2.7.3
+
+Security release. See advisory [GHSA-fvr7-wjgh-pm2q](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-fvr7-wjgh-pm2q).
+
+- security: a value saved to a `.js` / `.ts` `addPath` can no longer run as code when the file is read back for the next write. The ESM build cut the file at its first `=` as soon as it contained `exports` anywhere, so two saved values like ``exports=0,…`` moved that cut into a value. Reading now starts right after `export default` or `module.exports =`. Reachable when keys or values come from requests, e.g. via `i18next-http-middleware`'s `missingKeyHandler`, with a `.js` / `.ts` `addPath`.
+- fix: the CommonJS build reads back the `module.exports` file it writes to a `.js` / `.ts` `addPath`. It evaluated the file as is and failed, so each write kept only its own keys.
+
 ### 2.7.2
 
 Security release. Reported by [@p0larb3ar](https://github.com/p0larb3ar). See advisory [GHSA-84fh-q6g6-vvcq](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-84fh-q6g6-vvcq).
