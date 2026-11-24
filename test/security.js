@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 import { dirname, join } from 'path'
-import { mkdtempSync, readFileSync, rmSync } from 'fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -333,6 +333,55 @@ describe('security', () => {
         backend.create(['locks'], 'en', 'b', 'B', check) // used to throw `obj[k].push is not a function`
         backend.create(['locks'], 'translation', 'c', 'C', check)
         backend.create(['translation'], 'translation', 'd', 'D', check) // used to throw from the debounce timer and exit the process
+      })
+    })
+  })
+
+  describe('a key below a string, number or array (GHSA-84fh-q6g6-vvcq)', () => {
+    let dir
+    beforeEach(() => {
+      dir = mkdtempSync(join(tmpdir(), 'i18next-fs-backend-leaf-'))
+    })
+    afterEach(() => {
+      rmSync(dir, { recursive: true, force: true })
+    })
+    const make = () => new Backend(null, { addPath: join(dir, '{{lng}}.missing.json') })
+    const read = () => JSON.parse(readFileSync(join(dir, 'en.missing.json'), 'utf8'))
+    // the create callback runs inside the write promise, so a failed expect would only time out
+    const verify = (done, fn) => { try { fn() } catch (e) { return done(e) } done() }
+
+    it('keeps `a.length` and `a.0` flat next to the string `a` in one write', (done) => {
+      const backend = make()
+      let todo = 4
+      const check = () => {
+        if (--todo) return
+        // used to throw `Cannot assign to read only property` from the debounce timer and exit the process
+        verify(done, () => expect(read()).to.eql({ a: 'hello', 'a.length': 'x', 'a.0': 'y', 'a.0.length': 'z' }))
+      }
+      backend.create(['en'], 'translation', 'a', 'hello', check)
+      backend.create(['en'], 'translation', 'a.length', 'x', check)
+      backend.create(['en'], 'translation', 'a.0', 'y', check)
+      backend.create(['en'], 'translation', 'a.0.length', 'z', check)
+    })
+
+    it('keeps what the file already has', (done) => {
+      writeFileSync(join(dir, 'en.missing.json'), JSON.stringify({ keep: 'me', a: 'hello' }))
+      make().create(['en'], 'translation', 'a.length', 'x', () => {
+        // used to overwrite the file with { a: { length: 'x' } }
+        verify(done, () => expect(read()).to.eql({ keep: 'me', a: 'hello', 'a.length': 'x' }))
+      })
+    })
+
+    it('leaves the file alone and keeps writing when the data cannot be stringified', (done) => {
+      writeFileSync(join(dir, 'en.missing.json'), JSON.stringify({ keep: 'me', a: ['x'] }))
+      const backend = make()
+      // index 2^32 - 2 makes an array JSON.stringify cannot turn into a string
+      backend.create(['en'], 'translation', 'a.4294967294', 'y', () => {
+        // used to overwrite the file with { a: { 4294967294: 'y' } }
+        try { expect(read()).to.eql({ keep: 'me', a: ['x'] }) } catch (e) { return done(e) }
+        backend.create(['en'], 'translation', 'later', 'z', () => {
+          verify(done, () => expect(read()).to.eql({ keep: 'me', a: ['x'], later: 'z' }))
+        })
       })
     })
   })
