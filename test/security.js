@@ -3,6 +3,7 @@ import { dirname, join } from 'path'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { fileURLToPath } from 'url'
+import { createRequire } from 'module'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 import i18next from 'i18next'
 import Backend from '../index.js'
@@ -381,6 +382,48 @@ describe('security', () => {
         try { expect(read()).to.eql({ keep: 'me', a: ['x'] }) } catch (e) { return done(e) }
         backend.create(['en'], 'translation', 'later', 'z', () => {
           verify(done, () => expect(read()).to.eql({ keep: 'me', a: ['x'], later: 'z' }))
+        })
+      })
+    })
+  })
+
+  describe('values saved to a `.js` addPath stay data', () => {
+    let dir
+    beforeEach(() => {
+      dir = mkdtempSync(join(tmpdir(), 'i18next-fs-backend-js-'))
+    })
+    afterEach(() => {
+      rmSync(dir, { recursive: true, force: true })
+      delete globalThis.fsBackendPwned
+    })
+    const read = () => readFileSync(join(dir, 'en.missing.js'), 'utf8')
+    const verify = (done, fn) => { try { fn() } catch (e) { return done(e) } done() }
+
+    it('does not run a saved value when the file is read for the next write', (done) => {
+      const backend = new Backend(null, { addPath: join(dir, '{{lng}}.missing.js') })
+      // the ESM build cut the file at its first `=` once it contained `exports` anywhere,
+      // so these two values became code on the next read
+      backend.create(['en'], 'translation', 'a', 'exports=0,globalThis.fsBackendPwned=42,`')
+      backend.create(['en'], 'translation', 'b', '`,{x:0//', () => {
+        backend.create(['en'], 'translation', 'c', 'any', () => {
+          verify(done, () => {
+            expect(globalThis.fsBackendPwned).to.be(undefined)
+            expect(JSON.parse(read().replace('export default ', ''))).to.eql({
+              a: 'exports=0,globalThis.fsBackendPwned=42,`', b: '`,{x:0//', c: 'any'
+            })
+          })
+        })
+      })
+    })
+
+    it('reads its own file back with the CommonJS build', (done) => {
+      // `module.exports = …` was evaluated as is, where `module` is not defined, so every
+      // write started from an empty object and kept only its own keys
+      const BackendCjs = createRequire(import.meta.url)('../cjs/index.js')
+      const backend = new BackendCjs(null, { addPath: join(dir, '{{lng}}.missing.js') })
+      backend.create(['en'], 'translation', 'first', '1', () => {
+        backend.create(['en'], 'translation', 'second', '2', () => {
+          verify(done, () => expect(read()).to.be('module.exports = {\n  "first": "1",\n  "second": "2"\n}'))
         })
       })
     })
