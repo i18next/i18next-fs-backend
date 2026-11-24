@@ -1,3 +1,9 @@
+### 2.7.2
+
+Security release. Reported by [@p0larb3ar](https://github.com/p0larb3ar). See advisory [GHSA-84fh-q6g6-vvcq](https://github.com/i18next/i18next-fs-backend/security/advisories/GHSA-84fh-q6g6-vvcq).
+
+- security: a missing key below a string (`a.length`, `a.0` next to `a`) is now written as a flat key, like `a.b` already was. Any error while merging or stringifying used to retry the write on an empty object: with both keys in one write it threw again from the debounce timer and the Node.js process exited; with `a` already in the file, the file was replaced by the new keys only. Now the file stays as it is and the write lock is released. On Bun every key below a string took this path. Reachable when keys come from requests, e.g. via `i18next-http-middleware`'s `missingKeyHandler`.
+
 ### 2.7.1
 
 - fix(types): `create` declares its optional fifth parameter, the callback it calls once the key is written for every language. i18next 27.2.4 passes it to backends that set `callbackApi: true`.
